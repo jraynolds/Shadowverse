@@ -1,0 +1,508 @@
+{
+	"Skeleton": {
+		"Name": "Skeleton",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 1,
+		"Base": {
+			"Attack": 1,
+			"Defense": 1
+		}
+	},
+	"Ghost": {
+		"Name": "Ghost",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 1,
+		"Base": {
+			"Attack": 1,
+			"Defense": 1,
+			"Abilities": ["Storm"],
+			"Effects": [
+				{
+					"Trigger": "onFriendlyTurnEnd",
+					"Effect": "self.card.banish()",
+					"Test": "self.state = CARD_STATES.played"
+				},
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.card.banish()",
+					"Test": "self.state = CARD_STATES.played"
+				}
+			]
+		},
+		"Evolve": {
+			"Effects": [
+				{
+					"Trigger": "onFriendlyTurnEnd",
+					"Effect": "self.card.banish()"
+				},
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.card.banish()"
+				}
+			]
+		}
+	},
+	"SkullBeast": {
+		"Name": "Skull Beast",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 1,
+		"Base": {
+			"Attack": 1,
+			"Defense": 2,
+			"Effects": [
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.owner.gainShadows(1)"
+				}
+			]
+		},
+		"Evolve": {
+			"Effects": [
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.owner.gainShadows(1)"
+				}
+			]
+		}
+	},
+	"LadyGrey": {
+		"Name": "Lady Grey, Deathweaver",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 2,
+		"Base": {
+			"Attack": 1,
+			"Defense": 3,
+			"Abilities": ["Drain"]
+		},
+		"Evolve": {
+			"Abilities": ["Drain"],
+			"Effects": [
+				{
+					"Trigger": "onEvolved",
+					"Effect": "self.owner.reanimate(2)"
+				}
+			]
+		}
+	},
+	"Jackshovel": {
+		"Name": "Jackshovel Gravedigger",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Trait": "Machina",
+		"Cost": 2,
+		"Base": {
+			"Attack": 1,
+			"Defense": 2,
+			"Abilities": ["Bane"],
+			"Effects": [
+				{
+					"Trigger": "onSummoned",
+					"Effect": "Rush"
+				},
+				{
+					"Trigger": "onSummoned",
+					"Effect": "self.card.buff([1,1] * logic.getCardsMatching({'Location': 'onFriendlyBoard', 'Trait': 'Machina'}))"
+				}
+			]
+		},
+		"Evolve": {
+			"AttackChange": 0,
+			"DefenseChange": 0,
+			"Abilities": ["Bane"],
+			"Effects": [
+				{
+					"Trigger": "onEvolved",
+					"Effect": "self.owner.playCardNames(['AssemblyDroid', 'AssemblyDroid', 'AssemblyDroid', 'AssemblyDroid'])"
+				}
+			]
+		}
+	},
+	"AssemblyDroid": {
+		"Name": "Assembly Droid",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Trait": "Machina",
+		"Cost": 1,
+		"Base": {
+			"Attack": 1,
+			"Defense": 1
+		}
+	},
+	"Gremory": {
+		"Name": "Gremory, Death Teller",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 2,
+		"Base": {
+			"Attack": 1,
+			"Defense": 3,
+			"Abilities": ["Ward"],
+			"Effects": [
+				{
+					"Trigger": "onFriendlyTurnStart",
+					"Test": "self.owner.shadows > len(self.owner.deck.cards)",
+					"Effect": "self.owner.invokeCard(self.card)",
+					"Type": "Invocation"					
+				},
+				{
+					"Trigger": "onEntersBoard",
+					"Test": "self.owner.shadows > len(self.owner.deck.cards)",
+					"Effect": {
+						"Trigger": "onFriendlyNecromancy",
+						"Effect": "self.owner.gainShadows(kwargs['shadows'])",
+						"Amount": 1,
+						"Refill": "onFriendlyTurnStart"
+					},
+					"Unstackable": true
+				},
+				{
+					"Trigger": "onEntersBoard",
+					"Test": "self.owner.shadows > len(self.owner.deck.cards)",
+					"Effect": {
+						"Trigger": "onFriendlyNecromancy",
+						"Effect": "self.owner.gainEnergy(kwargs['shadows'])",
+						"Amount": 1,
+						"Refill": "onFriendlyTurnStart"
+					},
+					"Unstackable": true
+				}
+			]
+		},
+		"Evolve": {
+			"Abilities": ["Ward"]
+		}
+	},
+	"Minthe": {
+		"Name": "Minthe of the Underworld",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 3,
+		"Base": {
+			"Attack": 2,
+			"Defense": 2,
+			"Effects": [
+				{
+					"Trigger": "onEntersBoard",
+					"Effect": "self.owner.gainShadows(20)"
+				},
+				{
+					"Trigger": "onFriendlyNecromancy",
+					"Effect": "self.owner.gainShadows(kwargs['shadows'])"
+				},
+				{
+					"Trigger": "onLeavesBoard",
+					"Effect": "self.owner.gainShadows(-20)"
+				}
+			]
+		},
+		"Evolve": {
+			"Effects": [
+				{
+					"Trigger": "onFriendlyNecromancy",
+					"Effect": "self.owner.gainShadows(kwargs['shadows'])"
+				},
+				{
+					"Trigger": "onLeavesBoard",
+					"Effect": "self.owner.gainShadows(-20)"
+				}
+			]
+		}
+	},
+	"DeathlyTyrant": {
+		"Name": "Deathly Tyrant",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 6,
+		"Abilities": [ "Storm" ],
+		"Base": {
+			"Attack": 3,
+			"Defense": 3,
+			"Effects": [
+				{
+					"Trigger": "onEntersBoard",
+					"Test": "self.owner.shadows >= 20",
+					"Effect": "self.card.attack += 10; self.card.defense += 10; self.owner.necromancy(20)"
+				}
+			]
+		}
+	},
+	"SarcophagusWraith": {
+		"Name": "Sarcophagus Wraith",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 3,
+		"Enhance": 6,
+		"Base": {
+			"Attack": 1,
+			"Defense": 3,
+			"Effects": [
+				{
+					"Trigger": "onEntersBoard",
+					"Effect": "self.owner.playCardNames(['FabledTreasure'])"
+				},
+				{
+					"Trigger": "onEnhanced",
+					"Effect": "self.owner.playCardNames(['ProfaneTreasure'])"
+				}
+			]
+		}
+	},
+	"FabledTreasure": {
+		"Name": "Fabled Treasure",
+		"Type": "Amulet",
+		"Cost": 1,
+		"Base": {
+			"Effects": [
+				{
+					"Trigger": "onFriendlyCardDestroyed",
+					"Effect": "self.card.destroy()"
+				},
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.owner.draw(2); self.owner.gainHealth(2)"
+				}
+			]
+		}
+	},
+	"ProfaneTreasure": {
+		"Name": "Profane Treasure",
+		"Type": "Amulet",
+		"Cost": 1,
+		"Base": {
+			"Effects": [
+				{
+					"Trigger": "onFriendlyCardDestroyed",
+					"Effect": "self.card.destroy()"
+				},
+				{
+					"Trigger": "onDestroyed",
+					"Effect": "self.owner.playCardNames(['Lich', 'Zombie'])"
+				}
+			]
+		}
+	},
+	"Lich": {
+		"Name": "Lich",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 4,
+		"Base": {
+			"Attack": 4,
+			"Defense": 4
+		}
+	},
+	"Zombie": {
+		"Name": "Zombie",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 2,
+		"Base": {
+			"Attack": 2,
+			"Defense": 2
+		}
+	},
+	"DeathsMistress": {
+		"Name": "Death's Mistress",
+		"Type": "Monster",
+		"Craft": "Shadow",
+		"Cost": 8,
+		"BurialRite": 1,
+		"Abilities": ["Ambush"],
+		"Base": {
+			"Attack": 6,
+			"Defense": 6
+		},
+		"Accelerate": {
+			"Cost": 2,
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "self.owner.draw()"
+				},
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "self.owner.burialRite(kwargs['targets'][0])"
+				},
+				{
+					"Trigger": "onAccelerated",
+					"Effect": "self.owner.draw()"
+				}
+			],
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "inFriendlyHand"
+				}
+			]
+		}
+	},
+	"Guilt": {
+		"Name": "Guilt, Existential Blader",
+		"Type": "Monster",
+		"Craft": "Neutral",
+		"Cost": 8,
+		"Abilities": ["Rush"],
+		"Base": {
+			"Attack": 6,
+			"Defense": 8
+		},
+		"Accelerate": {
+			"Cost": 1,
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "onFriendlyBoard"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].destroy(); self.owner.draw(2)"
+				}
+			]
+		}
+	},
+	"SoulConversion": {
+		"Name": "Soul Conversion",
+		"Type": "Spell",
+		"Cost": 1,
+		"Base": {
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "onFriendlyBoard"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].destroy(); self.owner.draw(2)"
+				}
+			]
+		}
+	},
+	"GhostlyGrasp": {
+		"Name": "Ghostly Grasp",
+		"Type": "Spell",
+		"Cost": 1,
+		"Base": {
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "onEnemyBoard",
+					"Test": "target.defense == 1"
+				},
+				{
+					"Type": "Monster",
+					"Location": "onEnemyBoard",
+					"Test": "owner.shadows >= 8"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].destroy()",
+					"Test": "kwargs['targets'][0].defense == 1"
+				},
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].destroy(); self.owner.necromancy(8)",
+					"Test": "kwargs['targets'][0].defense != 1"
+				}
+			]
+		}
+	},
+	"SonataSilence": {
+		"Name": "Sonata of Silence",
+		"Type": "Spell",
+		"Cost": 1,
+		"Base": {
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "onFriendlyBoard"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].removeEffects()"
+				},
+				{
+					"Trigger": "onPlayed",
+					"Effect": "self.owner.draw()"
+				}
+			]
+		},
+		"Enhance": {
+			"Cost": 4,
+			"Effects": [
+				{
+					"Trigger": "onPlayed",
+					"Effect": "for card in logic.getMonstersonBoard(): card.removeEffects()"
+				}
+			]
+		}
+	},
+	"DemonicProcession": {
+		"Name": "Demonic Procession",
+		"Type": "Spell",
+		"Cost": 1,
+		"Base": {
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "inFriendlyHand"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "self.owner.burialRite(kwargs['targets'][0]); self.owner.tutor(type='Monster', craft='Shadow')"
+				},
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "self.owner.tutor(type='Monster', craft='Shadow')",
+					"Test": "kwargs['targets'][0].attack == 1 or kwargs['targets'][0].defense == 1"
+				}
+			]
+		}
+	},
+	"GhastlyAssault": {
+		"Name": "Ghastly Assault",
+		"Type": "Spell",
+		"Cost": 2,
+		"Base": {
+			"Targets": [
+				{
+					"Type": "Monster",
+					"Location": "onEnemyBoard"
+				}
+			],
+			"Effects": [
+				{
+					"Trigger": "onTargetsChosen",
+					"Effect": "kwargs['targets'][0].takeDamage(3); self.owner.addCards([ 'Ghost' ])"
+				}
+			]
+		}
+	},
+	"PathPurgatory": {
+		"Name": "Path to Purgatory",
+		"Type": "Amulet",
+		"Cost": 4,
+		"Base": {
+			"Effects": [
+				{
+					"Trigger": "onFriendlyTurnEnd",
+					"Effect": "for card in game.getOtherPlayer(self.owner).getMonstersonBoard(): card.takeDamage(6); game.getOtherPlayer(self.owner).takeDamage(6)",
+					"Test": "self.owner.shadows >= 30"
+				}
+			]
+		}
+	}
+}
